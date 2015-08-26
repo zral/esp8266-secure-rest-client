@@ -1,16 +1,25 @@
-#include <Arduino.h>
-#include <SPI.h>
-#include <Ethernet.h>
+#ifndef WifiRestClient_h
+#define WifiRestClient_h
 
-class RestClient {
+#include <Arduino.h>
+#include <ESP8266WiFi.h>
+
+class WiFiRestClient {
+
+  private:
+    WiFiClient client;
+    const char* host;
+    int port;
+    int num_headers;
+    const char* headers[10];
+	const char* contentType;
+
+    int readResponse(String*);
+    void write(const char*);
 
   public:
-    RestClient(const char* host);
-    RestClient(const char* _host, int _port);
-
-    //Client Setup
-    void dhcp();
-    int begin(byte*);
+    WiFiRestClient(const char* host);
+    WiFiRestClient(const char* host, int port);
 
     //Generic HTTP Request
     int request(const char* method, const char* path,
@@ -44,13 +53,6 @@ class RestClient {
     // DELETE path and body and response
     int del(const char*, const char*, String*);
 
-  private:
-    EthernetClient client;
-    int readResponse(String*);
-    void write(const char*);
-    const char* host;
-    int port;
-    int num_headers;
-    const char* headers[10];
-	const char* contentType;
 };
+
+#endif

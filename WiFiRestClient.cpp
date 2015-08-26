@@ -1,4 +1,4 @@
-#include "RestClient.h"
+#include "WiFiRestClient.h"
 
 #ifdef HTTP_DEBUG
 #define HTTP_DEBUG_PRINT(string) (Serial.print(string))
@@ -8,102 +8,89 @@
 #define HTTP_DEBUG_PRINT(string)
 #endif
 
-RestClient::RestClient(const char* _host){
+WiFiRestClient::WiFiRestClient( const char* _host ) {
+
   host = _host;
   port = 80;
   num_headers = 0;
   contentType = "x-www-form-urlencoded";	// default
 }
 
-RestClient::RestClient(const char* _host, int _port){
+WiFiRestClient::WiFiRestClient(const char* _host, int _port) {
+
   host = _host;
   port = _port;
   num_headers = 0;
   contentType = "x-www-form-urlencoded";	// default
 }
 
-void RestClient::dhcp(){
-  byte mac[] = { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED };
-  if (begin(mac) == 0) {
-    Serial.println("Failed to configure Ethernet using DHCP");
-  }
-  //give it time to initialize
-  delay(1000);
-}
-
-int RestClient::begin(byte mac[]){
-  return Ethernet.begin(mac);
-  //give it time to initialize
-  delay(1000);
-}
-
 // GET path
-int RestClient::get(const char* path){
+int WiFiRestClient::get(const char* path){
   return request("GET", path, NULL, NULL);
 }
 
 //GET path with response
-int RestClient::get(const char* path, String* response){
+int WiFiRestClient::get(const char* path, String* response){
   return request("GET", path, NULL, response);
 }
 
 // POST path and body
-int RestClient::post(const char* path, const char* body){
+int WiFiRestClient::post(const char* path, const char* body){
   return request("POST", path, body, NULL);
 }
 
 // POST path and body with response
-int RestClient::post(const char* path, const char* body, String* response){
+int WiFiRestClient::post(const char* path, const char* body, String* response){
   return request("POST", path, body, response);
 }
 
 // PUT path and body
-int RestClient::put(const char* path, const char* body){
+int WiFiRestClient::put(const char* path, const char* body){
   return request("PUT", path, body, NULL);
 }
 
 // PUT path and body with response
-int RestClient::put(const char* path, const char* body, String* response){
+int WiFiRestClient::put(const char* path, const char* body, String* response){
   return request("PUT", path, body, response);
 }
 
 // DELETE path
-int RestClient::del(const char* path){
+int WiFiRestClient::del(const char* path){
   return request("DELETE", path, NULL, NULL);
 }
 
 // DELETE path and response
-int RestClient::del(const char* path, String* response){
+int WiFiRestClient::del(const char* path, String* response){
   return request("DELETE", path, NULL, response);
 }
 
 // DELETE path and body
-int RestClient::del(const char* path, const char* body ){
+int WiFiRestClient::del(const char* path, const char* body ){
   return request("DELETE", path, body, NULL);
 }
 
 // DELETE path and body with response
-int RestClient::del(const char* path, const char* body, String* response){
+int WiFiRestClient::del(const char* path, const char* body, String* response){
   return request("DELETE", path, body, response);
 }
 
-void RestClient::write(const char* string){
+void WiFiRestClient::write( const char* string ){
   HTTP_DEBUG_PRINT(string);
   client.print(string);
 }
 
-void RestClient::setHeader(const char* header){
+void WiFiRestClient::setHeader(const char* header){
   headers[num_headers] = header;
   num_headers++;
 }
 
-void RestClient::setContentType(const char* contentTypeValue){
+void WiFiRestClient::setContentType(const char* contentTypeValue){
   contentType = contentTypeValue;
 }
 
 // The mother- generic request method.
 //
-int RestClient::request(const char* method, const char* path,
+int WiFiRestClient::request(const char* method, const char* path,
                   const char* body, String* response){
 
   HTTP_DEBUG_PRINT("HTTP: connect\n");
@@ -164,7 +151,7 @@ int RestClient::request(const char* method, const char* path,
   }
 }
 
-int RestClient::readResponse(String* response) {
+int WiFiRestClient::readResponse(String* response) {
 
   // an http request ends with a blank line
   boolean currentLineIsBlank = true;
