@@ -1,6 +1,6 @@
-# RestClient for ESP8266 Arduino
+# RestClient for ESP8266
 
-HTTP Request library for ESP8266 Arduino
+HTTP Request library for ESP8266
 
 This is a port of [CanTireInnovations/arduino-restclient](https://github.com/CanTireInnovations/esp8266-arduino-rest-client) to
 work with https
