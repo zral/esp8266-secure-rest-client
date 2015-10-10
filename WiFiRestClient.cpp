@@ -1,4 +1,4 @@
-#include "WiFiRestClient.h"
+#include "WifiSecureRestClient.h"
 
 #ifdef HTTP_DEBUG
 #define HTTP_DEBUG_PRINT(string) (Serial.print(string))
@@ -8,15 +8,15 @@
 #define HTTP_DEBUG_PRINT(string)
 #endif
 
-WiFiRestClient::WiFiRestClient( const char* _host ) {
+WifiSecureRestClient::WifiSecureRestClient( const char* _host ) {
 
   host = _host;
-  port = 80;
+  port = 443;
   num_headers = 0;
   contentType = "x-www-form-urlencoded";	// default
 }
 
-WiFiRestClient::WiFiRestClient(const char* _host, int _port) {
+WifiSecureRestClient::WifiSecureRestClient(const char* _host, int _port) {
 
   host = _host;
   port = _port;
@@ -25,78 +25,78 @@ WiFiRestClient::WiFiRestClient(const char* _host, int _port) {
 }
 
 // GET path
-int WiFiRestClient::get(const char* path){
+int WifiSecureRestClient::get(const char* path){
   return request("GET", path, NULL, NULL);
 }
 
 //GET path with response
-int WiFiRestClient::get(const char* path, String* response){
+int WifiSecureRestClient::get(const char* path, String* response){
   return request("GET", path, NULL, response);
 }
 
 // POST path and body
-int WiFiRestClient::post(const char* path, const char* body){
+int WifiSecureRestClient::post(const char* path, const char* body){
   return request("POST", path, body, NULL);
 }
 
 // POST path and body with response
-int WiFiRestClient::post(const char* path, const char* body, String* response){
+int WifiSecureRestClient::post(const char* path, const char* body, String* response){
   return request("POST", path, body, response);
 }
 
 // PUT path and body
-int WiFiRestClient::put(const char* path, const char* body){
+int WifiSecureRestClient::put(const char* path, const char* body){
   return request("PUT", path, body, NULL);
 }
 
 // PUT path and body with response
-int WiFiRestClient::put(const char* path, const char* body, String* response){
+int WifiSecureRestClient::put(const char* path, const char* body, String* response){
   return request("PUT", path, body, response);
 }
 
 // DELETE path
-int WiFiRestClient::del(const char* path){
+int WifiSecureRestClient::del(const char* path){
   return request("DELETE", path, NULL, NULL);
 }
 
 // DELETE path and response
-int WiFiRestClient::del(const char* path, String* response){
+int WifiSecureRestClient::del(const char* path, String* response){
   return request("DELETE", path, NULL, response);
 }
 
 // DELETE path and body
-int WiFiRestClient::del(const char* path, const char* body ){
+int WifiSecureRestClient::del(const char* path, const char* body ){
   return request("DELETE", path, body, NULL);
 }
 
 // DELETE path and body with response
-int WiFiRestClient::del(const char* path, const char* body, String* response){
+int WifiSecureRestClient::del(const char* path, const char* body, String* response){
   return request("DELETE", path, body, response);
 }
 
-void WiFiRestClient::write( const char* string ){
+void WifiSecureRestClient::write( const char* string ){
   HTTP_DEBUG_PRINT(string);
   client.print(string);
 }
 
-void WiFiRestClient::setHeader(const char* header){
+void WifiSecureRestClient::setHeader(const char* header){
   headers[num_headers] = header;
   num_headers++;
 }
 
-void WiFiRestClient::setContentType(const char* contentTypeValue){
+void WifiSecureRestClient::setContentType(const char* contentTypeValue){
   contentType = contentTypeValue;
 }
 
 // The mother- generic request method.
 //
-int WiFiRestClient::request(const char* method, const char* path,
+int WifiSecureRestClient::request(const char* method, const char* path,
                   const char* body, String* response){
 
-  HTTP_DEBUG_PRINT("HTTP: connect\n");
+  HTTP_DEBUG_PRINT("HTTPS: connect\n");
 
   if(client.connect(host, port)){
-    HTTP_DEBUG_PRINT("HTTP: connected\n");
+    HTTP_DEBUG_PRINT("HTTPS: connected\n");
     HTTP_DEBUG_PRINT("REQUEST: \n");
     // Make a HTTP request line:
     write(method);
@@ -133,16 +133,16 @@ int WiFiRestClient::request(const char* method, const char* path,
     //make sure you write all those bytes.
     delay(100);
 
-    HTTP_DEBUG_PRINT("HTTP: call readResponse\n");
+    HTTP_DEBUG_PRINT("HTTPS: call readResponse\n");
     int statusCode = readResponse(response);
-    HTTP_DEBUG_PRINT("HTTP: return readResponse\n");
+    HTTP_DEBUG_PRINT("HTTPS: return readResponse\n");
 
     //cleanup
-    HTTP_DEBUG_PRINT("HTTP: stop client\n");
+    HTTP_DEBUG_PRINT("HTTPS: stop client\n");
     num_headers = 0;
     client.stop();
     delay(50);
-    HTTP_DEBUG_PRINT("HTTP: client stopped\n");
+    HTTP_DEBUG_PRINT("HTTPS: client stopped\n");
 
     return statusCode;
   }else{
@@ -151,7 +151,7 @@ int WiFiRestClient::request(const char* method, const char* path,
   }
 }
 
-int WiFiRestClient::readResponse(String* response) {
+int WifiSecureRestClient::readResponse(String* response) {
 
   // an http request ends with a blank line
   boolean currentLineIsBlank = true;
@@ -163,12 +163,12 @@ int WiFiRestClient::readResponse(String* response) {
   int code = 0;
 
   if(response == NULL){
-    HTTP_DEBUG_PRINT("HTTP: NULL RESPONSE POINTER: \n");
+    HTTP_DEBUG_PRINT("HTTPS: NULL RESPONSE POINTER: \n");
   }else{
-    HTTP_DEBUG_PRINT("HTTP: NON-NULL RESPONSE POINTER: \n");
+    HTTP_DEBUG_PRINT("HTTPS: NON-NULL RESPONSE POINTER: \n");
   }
 
-  HTTP_DEBUG_PRINT("HTTP: RESPONSE: \n");
+  HTTP_DEBUG_PRINT("HTTPS: RESPONSE: \n");
   while (client.connected()) {
     HTTP_DEBUG_PRINT(".");
 
@@ -213,6 +213,6 @@ int WiFiRestClient::readResponse(String* response) {
     }
   }
 
-  HTTP_DEBUG_PRINT("HTTP: return readResponse3\n");
+  HTTP_DEBUG_PRINT("HTTPS: return readResponse3\n");
   return code;
 }

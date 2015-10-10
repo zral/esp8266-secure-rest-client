@@ -2,8 +2,8 @@
 
 HTTP Request library for ESP8266 Arduino
 
-This is a port of [csquared/arduino-restclient](https://github.com/csquared/arduino-restclient) to
-work with the ESP8266.
+This is a port of [CanTireInnovations/arduino-restclient](https://github.com/CanTireInnovations/esp8266-arduino-rest-client) to
+work with https
 
 ## RESTful methods
 
@@ -71,4 +71,3 @@ Everything happening in the client will get printed to the Serial port.
 # Thanks
 
 [csquared](https://github.com/csquared/arduino-restclient) For the original Arduino library
-

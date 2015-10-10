@@ -1,13 +1,14 @@
-#ifndef WifiRestClient_h
-#define WifiRestClient_h
+#ifndef WiFiSecureRestClient_h
+#define WiFiSecureRestClient_h
 
 #include <Arduino.h>
 #include <ESP8266WiFi.h>
+#include <WifiClientSecure.h>
 
-class WiFiRestClient {
+class WiFiSecureRestClient {
 
   private:
-    WiFiClient client;
+    WiFiClientSecure client;
     const char* host;
     int port;
     int num_headers;
@@ -18,8 +19,8 @@ class WiFiRestClient {
     void write(const char*);
 
   public:
-    WiFiRestClient(const char* host);
-    WiFiRestClient(const char* host, int port);
+    WiFiSecureRestClient(const char* host);
+    WiFiSecureRestClient(const char* host, int port);
 
     //Generic HTTP Request
     int request(const char* method, const char* path,
